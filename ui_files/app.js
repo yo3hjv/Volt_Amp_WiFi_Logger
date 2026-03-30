@@ -44,8 +44,8 @@
   let scaleA = 0.1; // A
 
   // User thresholds
-  const vScaleSteps = [3, 6, 10, 15, 26, 35];
-  const aScaleSteps = [0.1, 0.2, 0.5, 1.0, 1.5, 3.0];
+  const vScaleSteps = [3, 6, 10, 15, 20, 26, 35];
+  const aScaleSteps = [0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 1.5, 3.0];
 
   function nextFromSteps(x, steps, fallbackMax) {
     if (!isFinite(x) || x <= 0) return steps[0];
@@ -84,13 +84,13 @@
     ctx.fillRect(0, 0, w, h);
 
     // dotted
-    ctx.strokeStyle = 'rgba(128,128,128,0.5)';
+    ctx.strokeStyle = 'rgba(128,128,128,0.75)';
     ctx.lineWidth = 1;
     for (let x = 0; x <= w; x += 10) {
       if (x % 100 === 0) continue;
       for (let y = 0; y <= h; y += 10) {
         if (y % 100 === 0) continue;
-        ctx.fillStyle = 'rgba(128,128,128,0.25)';
+        ctx.fillStyle = 'rgba(128,128,128,0.45)';
         ctx.fillRect(x, y, 1, 1);
       }
     }
@@ -252,7 +252,7 @@
         valV.textContent = (msg.V ?? 0).toFixed(3) + ' V';
         valA.textContent = (msg.A ?? 0).toFixed(4) + ' A';
         valmW.textContent = (msg.mW ?? 0).toFixed(1) + ' mW';
-        valmWh.textContent = (msg.mWh ?? 0).toFixed(6) + ' mWh';
+        valmWh.textContent = (msg.mWh ?? 0).toFixed(2) + ' mWh';
         valT.textContent = formatElapsed(msg.elapsed_s ?? 0);
 
         if (timeBar) {

@@ -25,8 +25,20 @@
 static File s_logFile;
 static String s_logFilename;
 
+static const uint32_t kLogFlushIntervalMs = 3000;
+static uint32_t s_lastFlushMs = 0;
+
+static const int kLogTickLedPin = 13;
+static const uint32_t kLogTickPulseMs = 20;
+static uint32_t s_logTickOffAtMs = 0;
+
 static bool isDigit(char c) {
   return c >= '0' && c <= '9';
+}
+
+static void pulseLogTickLed(uint32_t now) {
+  digitalWrite(kLogTickLedPin, LOW);
+  s_logTickOffAtMs = now + kLogTickPulseMs;
 }
 
 static bool isTimestampLogName(const String& name) {
@@ -155,6 +167,9 @@ void startLogging() {
 
   if (g_loggingActive) return;
 
+  digitalWrite(kLogTickLedPin, HIGH);
+  s_logTickOffAtMs = 0;
+
   g_stopReason = "";
   g_energy_mWh = 0.0;
   g_lastEnergyMs = millis();
@@ -176,6 +191,8 @@ void startLogging() {
   s_logFile.println("elapsed_s,V,A,mW,mWh");
   s_logFile.flush();
 
+  s_lastFlushMs = millis();
+
   g_logStartMs = millis();
   g_lastLogTickMs = g_logStartMs;
   g_loggingActive = true;
@@ -190,8 +207,12 @@ void stopLogging(const char* reason) {
   g_stopReason = reason ? String(reason) : String("stop");
 
   if (s_logFile) {
+    s_logFile.flush();
     s_logFile.close();
   }
+
+  digitalWrite(kLogTickLedPin, HIGH);
+  s_logTickOffAtMs = 0;
 }
 
 static bool checkStopConditions(uint32_t now) {
@@ -242,6 +263,11 @@ void tickLogging() {
   }
 
   uint32_t now = millis();
+
+  if (s_logTickOffAtMs != 0 && (int32_t)(now - s_logTickOffAtMs) >= 0) {
+    digitalWrite(kLogTickLedPin, HIGH);
+    s_logTickOffAtMs = 0;
+  }
   if (checkStopConditions(now)) {
     return;
   }
@@ -255,7 +281,11 @@ void tickLogging() {
   // Use fixed decimals; Arduino snprintf float support depends on build flags, but ESP32 supports it.
   snprintf(line, sizeof(line), "%.3f,%.3f,%.4f,%.1f,%.6f", elapsed_s, g_voltageV, g_currentA, g_power_mW, (float)g_energy_mWh);
   s_logFile.println(line);
-  s_logFile.flush();
+  pulseLogTickLed(now);
+  if (now - s_lastFlushMs >= kLogFlushIntervalMs) {
+    s_logFile.flush();
+    s_lastFlushMs = now;
+  }
 
   g_logWritePulse = true;
   g_logPulseId++;

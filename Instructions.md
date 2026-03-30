@@ -143,6 +143,11 @@ The header also shows:
 - `Interval (ms)` controls how often a CSV line is appended.
 - The plot is updated **one point per log interval**.
 
+Note:
+
+- Very small intervals can increase SPIFFS write load. As a practical minimum, use **>= 200 ms**.
+- For performance and flash wear, the firmware may **flush to SPIFFS periodically** while still writing one CSV line per interval.
+
 ### 6.4 Stop conditions
 
 Stop conditions are optional. If enabled, logging stops automatically when a condition is reached:
