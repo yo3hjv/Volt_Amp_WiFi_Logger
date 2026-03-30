@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LabSupplyLog</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="title">LabSupplyLog</div>
+      <div class="timebar" id="timeBar">--</div>
+      <div class="conn">
+        <div class="pill" id="connPill">WS: disconnected</div>
+        <div class="leds">
+          <div class="ledWrap"><span class="ledLabel">LOG</span><span class="led" id="ledLog"></span></div>
+          <div class="ledWrap"><span class="ledLabel">WRITE</span><span class="led" id="ledPulse"></span></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="grid">
+        <div class="metric">
+          <div class="metricLabel">Voltage</div>
+          <div class="metricValue" id="valV">--</div>
+        </div>
+        <div class="metric">
+          <div class="metricLabel">Current</div>
+          <div class="metricValue" id="valA">--</div>
+        </div>
+        <div class="metric">
+          <div class="metricLabel">mW</div>
+          <div class="metricValue" id="valmW">--</div>
+        </div>
+        <div class="metric">
+          <div class="metricLabel">mWh</div>
+          <div class="metricValue" id="valmWh">--</div>
+        </div>
+        <div class="metric">
+          <div class="metricLabel">Elapsed</div>
+          <div class="metricValue" id="valT">--</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="row">
+          <button class="btn" id="btnStart">START Log</button>
+          <button class="btn danger" id="btnStop">STOP Log</button>
+          <label class="field">
+            <span>Interval (ms)</span>
+            <input id="inpInterval" type="number" min="50" step="10" value="1000" />
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="field">
+            <span>Stop I max (mA)</span>
+            <input id="stopImax" type="number" step="1" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Stop I min (mA)</span>
+            <input id="stopImin" type="number" step="1" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Stop V max (V)</span>
+            <input id="stopVmax" type="number" step="0.01" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Stop V min (V)</span>
+            <input id="stopVmin" type="number" step="0.01" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Stop T (s)</span>
+            <input id="stopT" type="number" step="1" placeholder="" />
+          </label>
+        </div>
+
+        <div class="row">
+          <a class="btn gray" href="/logs" target="_blank">LOGS</a>
+          <a class="btn wifi" href="/wifi" target="_blank">WIFI</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panelTitle">Calibration</div>
+      <div class="controls">
+        <div class="row">
+          <label class="field">
+            <span>Vcal (V)</span>
+            <input id="calV" type="number" step="0.001" placeholder="" />
+          </label>
+          <label class="field">
+            <span>Ical (A)</span>
+            <input id="calI" type="number" step="0.01" placeholder="" />
+          </label>
+          <button class="btn" id="btnCal">CAL</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="plotPanel">
+      <div class="plotHeader">
+        <div class="plotTitle">Plot</div>
+        <div class="plotScale" id="plotScale">V: -- | A: --</div>
+      </div>
+      <canvas id="plot" width="900" height="320"></canvas>
+      <div class="plotHint">One point per log interval (CSV write). Autoscale only up.</div>
+    </section>
+
+    <footer class="footer">Author: Adrian YO3HJV - March 2026</footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
