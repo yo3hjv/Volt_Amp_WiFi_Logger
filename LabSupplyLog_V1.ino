@@ -1,5 +1,5 @@
 // LabSupplyLog - main Arduino sketch entry point.
-//
+// Ver. 1.0 - release
 // Responsibilities:
 // - Initialize global state and persisted settings.
 // - Initialize storage (SPIFFS), WiFi, and INA219 sampling.
