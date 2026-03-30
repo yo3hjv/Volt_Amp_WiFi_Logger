@@ -17,9 +17,14 @@
 #include "WsMgr.h"
 #include "UploadMgr.h"
 
+static const int kLogTickLedPin = 13;
+
 void setup() {
   Serial.begin(115200);
   delay(200);
+
+  pinMode(kLogTickLedPin, OUTPUT);
+  digitalWrite(kLogTickLedPin, HIGH);
 
   initGlobals();
 
