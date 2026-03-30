@@ -18,6 +18,7 @@ INA219 connects via I2C:
 - **SCL**: GPIO 22 (default `Wire` SCL on many ESP32 boards)
 - **VCC**: 3.3 V
 - **GND**: GND
+- **GPIO13**: Write LED. To +3V3 via limiting resistor; pulse when ta is written on SPIFFS.
 
 If your ESP32 board uses different default I2C pins, adjust accordingly.
 
